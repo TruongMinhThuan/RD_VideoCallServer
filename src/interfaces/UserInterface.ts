@@ -26,4 +26,4 @@ export interface UserI {
 	picture: string;
 }
 
-export default IUser;
+export default UserI;

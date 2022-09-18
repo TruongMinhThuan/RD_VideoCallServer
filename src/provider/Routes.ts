@@ -18,7 +18,7 @@
      public mountApi(_express: Application): Application {
          const apiPrefix = Locals.config().apiPrefix || 'api';
         //  Logs.info('Routes :: Mounting API Routes...');
-        console.log('Mounted to API');
+        console.log('conntected to API');
         
          return _express.use(`/${apiPrefix}`, apiRouter);
      }

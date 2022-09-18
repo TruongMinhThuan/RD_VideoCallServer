@@ -14,7 +14,7 @@
       * throughout the app's runtime
       */
      public static config(): any {
-         dotenv.config({ path: path.join(__dirname, '../../.env') });
+         dotenv.config();
  
          const url = process.env.APP_URL || `http://localhost:${process.env.PORT}`;
          const port = process.env.PORT || 4040;

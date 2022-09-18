@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 
 import mongoose from '../provider/Database';
@@ -12,18 +11,19 @@ import mongoose from '../provider/Database';
 // }
 
 // Define the User Schema
-export const UserSchema = new mongoose.Schema({
+export const ChatRoomSchema = new mongoose.Schema({
 	username: { type: String, unique: true },
-	password: { type: String }
+	password: { type: String },
+	
 },{timestamps:true});
 
 // Compares the user's password with the request password
-UserSchema.methods.comparePassword = function (_requestPassword, _cb): any {
+ChatRoomSchema.methods.comparePassword = function (_requestPassword, _cb): any {
 	bcrypt.compare(_requestPassword, this.password, (_err, _isMatch) => {
 		return _cb(_err, _isMatch);
 	});
 };
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', ChatRoomSchema);
 
 export default User;

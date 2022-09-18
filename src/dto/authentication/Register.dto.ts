@@ -1,5 +1,4 @@
-
-export class LoginDTO {
+export default class RegisterDTO {
     username:string;
     password:string;
 }
