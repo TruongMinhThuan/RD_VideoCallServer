@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./src/index",
+    "start": "nodemon ./src/index.ts",
     "dev": "ts-node-dev --respawn --pretty --transpile-only src/index.ts"
   },
   "dependencies": {

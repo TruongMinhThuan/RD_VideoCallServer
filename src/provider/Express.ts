@@ -4,7 +4,7 @@
  * @author Faiz A. Farooqui <faiz@geekyants.com>
  */
 
- import express from 'express';
+ import express,{Router} from 'express';
 
  import Locals from './Locals';
  import Routes from './Routes';
@@ -15,8 +15,8 @@
      /**
       * Create the express object
       */
-     public express: express.Application;
- 
+    public express: express.Application;
+    public router :express.Router;
      /**
       * Initializes the express server
       */
@@ -43,7 +43,7 @@
       * Mounts all the defined routes
       */
      private mountRoutes (): void {
-         this.express = Routes.mountWeb(this.express);
+        //  this.express = Routes.mountWeb(this.express);
          this.express = Routes.mountApi(this.express);
      }
  
@@ -51,7 +51,7 @@
       * Starts the express server
       */
      public init (): any {
-         const port: number = Locals.config().port;
+         const port: number =  3000;
  
          // Registering Exception / Error Handlers
         //  this.express.use(ExceptionHandler.logErrors);
@@ -69,5 +69,5 @@
  }
  
  /** Export the express module */
- export default new Express();
+ export default new Express;
  

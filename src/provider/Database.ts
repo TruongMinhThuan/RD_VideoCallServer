@@ -1,13 +1,11 @@
 import mongoose,{Error} from 'mongoose';
 import Promise from 'bluebird';
-import { MongoError } from 'mongodb';
-
 import Locals from './Locals';
 
 export class Database {
 	// Initialize your database pool
 	public static init (): any {
-		const dsn = Locals.config().mongooseUrl;
+		const dsn = Locals.config().mongooseUrl || 'mongodb+srv://root:root@cluster0.rgzpkc8.mongodb.net/?retryWrites=true&w=majority';
 		const options = { };
 
 		// (<any>mongoose) = Promise;

@@ -6,21 +6,20 @@
 
  import { Application } from 'express';
  import Locals from './Locals';
- import Logs from '../middlewares/Logs';
- 
  import apiRouter from './../routes/Api';
  
  class Routes {
      public mountWeb(_express: Application): Application {
-         Logs.info('Routes :: Mounting Web Routes...');
+        //  Logs.info('Routes :: Mounting Web Routes...');
  
-         return 
+         return _express
      }
  
      public mountApi(_express: Application): Application {
-         const apiPrefix = Locals.config().apiPrefix;
-         Logs.info('Routes :: Mounting API Routes...');
- 
+         const apiPrefix = Locals.config().apiPrefix || 'api';
+        //  Logs.info('Routes :: Mounting API Routes...');
+        console.log('Mounted to API');
+        
          return _express.use(`/${apiPrefix}`, apiRouter);
      }
  }

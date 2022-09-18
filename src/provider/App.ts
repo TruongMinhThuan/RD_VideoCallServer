@@ -1,10 +1,10 @@
-import * as path from 'path';
-import * as dotenv from 'dotenv';
+// import * as path from 'path';
+// import * as dotenv from 'dotenv';
 
 import Express from './Express';
 import { Database } from './Database';
 
-import Locals from './Locals';
+// import Locals from './Locals';
 
 class App {
 	// // Clear the console
