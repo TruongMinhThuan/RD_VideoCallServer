@@ -14,7 +14,8 @@ import mongoose from '../provider/Database';
 // Define the User Schema
 export const UserSchema = new mongoose.Schema({
 	username: { type: String, unique: true },
-	password: { type: String }
+	password: { type: String },
+	token: {type:String}
 },{timestamps:true});
 
 // Compares the user's password with the request password

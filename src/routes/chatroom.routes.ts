@@ -1,7 +1,7 @@
-import ChatRoomController from '../controllers/api/rooms/ChatRoomController';
+import ChatController from '../controllers/api/rooms/ChatController';
 import express from 'express'
 const RoomRoute = express.Router()
 
-RoomRoute.post('/room',ChatRoomController.createRoom)
+RoomRoute.post('/room',ChatController.createRoom)
 
 export default RoomRoute

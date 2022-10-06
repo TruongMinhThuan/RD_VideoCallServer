@@ -1,29 +1,14 @@
-import bcrypt from 'bcrypt';
-
 import mongoose from '../provider/Database';
+import ChatMessage from './ChatMessageModel';
 
-// Create the model schema & register your custom methods here
-// export interface IUserModel extends IUser, mongoose.Document {
-// 	billingAddress(): string;
-// 	comparePassword(password: string, cb: any): string;
-// 	validPassword(password: string, cb: any): string;
-// 	gravatar(_size: number): string;
-// }
 
-// Define the User Schema
 export const ChatRoomSchema = new mongoose.Schema({
-	username: { type: String, unique: true },
-	password: { type: String },
-	
+	name: { type: String, unique: true },
+	author: {type:String} ,
+	conversation_id:{type:String,unique:true},
 },{timestamps:true});
 
-// Compares the user's password with the request password
-ChatRoomSchema.methods.comparePassword = function (_requestPassword, _cb): any {
-	bcrypt.compare(_requestPassword, this.password, (_err, _isMatch) => {
-		return _cb(_err, _isMatch);
-	});
-};
 
-const User = mongoose.model('User', ChatRoomSchema);
+const ChatRoom = mongoose.model('ChatRoom', ChatRoomSchema);
 
-export default User;
+export default ChatRoom;
