@@ -3,6 +3,7 @@
 
 import Express from './Express';
 import { Database } from './Database';
+import WebSocket from './Websocket'
 
 // import Locals from './Locals';
 
@@ -38,6 +39,20 @@ class App {
 	// Loads the Worker Cluster
 	public loadWorker (): void {
 		// Log.info('Worker :: Booting @ Master...');
+	}
+
+	public loadWebsocket ():void{
+		console.log('websocket');
+		WebSocket.init()
+		// WebSocket.on('connection',(ws)=>{
+		// 	console.log('connected to websocket...');
+			
+		// 	ws.on('message',(data)=>{
+		// 		console.log('ws data:: ',data);
+		// 	})
+
+		// 	ws.send('something...1111')
+		// });
 	}
 
 	// Loads the Queue Monitor
