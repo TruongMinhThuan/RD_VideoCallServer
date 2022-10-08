@@ -4,9 +4,6 @@ import { Response, Request, NextFunction, ErrorRequestHandler } from 'express';
 export const validate =
   (schema: yup.BaseSchema) =>
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log('====================================');
-    console.log('input:: ',req.body.name);
-    console.log('====================================');
     try {
       await schema.validate({
         body: req.body,
