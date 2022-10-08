@@ -1,16 +1,13 @@
-import { ResponseInterface } from "@server/interfaces/ResponseInterface";
-import { Request, Response,NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 
+abstract class BaseController {
+  handleSuccess(res: Response, message: string) {
+    return res.sendStatus(200);
+  }
 
-abstract class BaseController{
-   
-    handleSuccess(res:Response,message:string){
-        return res.sendStatus(200)
-    }
-
-    handleFail(res:Response){
-        return res.sendStatus(404)
-    }
+  handleFail(res: Response) {
+    return res.sendStatus(404);
+  }
 }
 
-export default BaseController
+export default BaseController;

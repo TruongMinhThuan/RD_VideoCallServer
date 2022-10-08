@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import  AuthRoute  from './authentication.routes';
-import RoomRoute from './chatroom.routes';
+import AuthRoute from './authentication.routes';
+import ChatRoute from './chat.routes';
 
 const router = Router();
-router.use(AuthRoute)
-router.use(RoomRoute)
+router.use(AuthRoute);
+router.use(ChatRoute);
 
 export default router;
