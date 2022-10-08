@@ -12,18 +12,14 @@ import mongoose from '../provider/Database';
 // }
 
 // Define the User Schema
-export const UserSchema = new mongoose.Schema({
-	username: { type: String, unique: true },
-	password: { type: String },
-	token: {type:String}
-},{timestamps:true});
-
-// Compares the user's password with the request password
-UserSchema.methods.comparePassword = function (_requestPassword, _cb): any {
-	bcrypt.compare(_requestPassword, this.password, (_err, _isMatch) => {
-		return _cb(_err, _isMatch);
-	});
-};
+export const UserSchema = new mongoose.Schema(
+  {
+    username: { type: String, unique: true },
+    password: { type: String },
+    token: { type: String },
+  },
+  { timestamps: true },
+);
 
 const User = mongoose.model('User', UserSchema);
 

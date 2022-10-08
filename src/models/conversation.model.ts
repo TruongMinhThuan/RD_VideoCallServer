@@ -2,7 +2,7 @@ import mongoose from '../provider/Database';
 
 // Define the Conversation Schema
 const ConversationSchema = new mongoose.Schema({
-  name: { type: String, unique: true },
+  name: { type: String, unique: false },
   last_message_id: { type: mongoose.Types.ObjectId, ref: 'Message' },
 });
 

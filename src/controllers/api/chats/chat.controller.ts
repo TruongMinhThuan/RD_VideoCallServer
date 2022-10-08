@@ -7,18 +7,18 @@ class ChatController {
   protected chat: ChatService;
 
   constructor() {
-    console.log('====================================');
-    console.log('init chat');
-    console.log('====================================');
     this.chat = new ChatService();
   }
 
   async createConversation(req: Request, res: Response) {
     try {
       console.log('====================================');
-      console.log('chat');
+      console.time('create');
       console.log('====================================');
       await this.chat.createConversation(req.body);
+      console.log('====================================');
+      console.timeEnd('create')
+      console.log('====================================');
       return res.sendStatus(201);
     } catch (error) {
       console.log('error: ', error);

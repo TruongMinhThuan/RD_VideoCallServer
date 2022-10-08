@@ -1,9 +1,13 @@
 import express from 'express';
+import { validate } from 'src/validations';
+import { CreateConversationValidation } from 'src/validations/CreateConversationValidation';
 import chatController from '../controllers/api/chats/chat.controller';
 
 const RoomRoute = express.Router();
-RoomRoute.post('/conversation', (req, res) =>
-  chatController.createConversation(req, res),
+RoomRoute.post(
+  '/conversation',
+  validate(CreateConversationValidation),
+  (req, res) => chatController.createConversation(req, res),
 );
 
 export default RoomRoute;

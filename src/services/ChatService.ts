@@ -3,14 +3,13 @@ import { Conversation } from '@models/index';
 
 export class ChatService {
   async createConversation(resource: CreateConversationDTO): Promise<any> {
-    const room = new Conversation(resource);
-    // const res = await room.save();
-    // console.log('room save: ', res);
-    // return res;
+   
+    const conversation = new Conversation(resource);
+    conversation.save();
     console.log('====================================');
-    console.log('create');
+    console.log('create: ', conversation);
     console.log('====================================');
-    return 'dsf'
+    return 'dsf';
   }
 
   async sendMessage(resource: SendMessageDTO) {
