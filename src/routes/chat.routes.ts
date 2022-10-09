@@ -10,4 +10,14 @@ RoomRoute.post(
   (req, res) => chatController.createConversation(req, res),
 );
 
+RoomRoute.get(
+  '/conversations/:id',
+  (req, res) => chatController.getConversations(req, res),
+);
+
+RoomRoute.post(
+  '/conversation/:id/join',
+  (req, res) => chatController.joinConversation(req, res),
+);
+
 export default RoomRoute;

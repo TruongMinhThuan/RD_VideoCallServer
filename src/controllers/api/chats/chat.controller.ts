@@ -12,18 +12,32 @@ class ChatController {
 
   async createConversation(req: Request, res: Response) {
     try {
-      console.log('====================================');
-      console.time('create');
-      console.log('====================================');
       await this.chat.createConversation(req.body);
-      console.log('====================================');
-      console.timeEnd('create')
-      console.log('====================================');
       return res.sendStatus(201);
     } catch (error) {
       console.log('error: ', error);
 
       return res.sendStatus(404);
+    }
+  }
+
+  async getConversations(req: Request, res: Response) {
+    try {
+      const conversations = await this.chat.getConversations({_id:req.params.id,user_id:Object('63425942f392ef38406f909d')})
+      return res.json(conversations)
+    } catch (error) {
+      console.log('errors: ',error);
+      return res.sendStatus(404)
+    }
+  }
+
+  async joinConversation(req: Request, res: Response) {
+    try {
+      const conversations = await this.chat.joinConversation({_id:req.params.id,participant:Object('63412bfe4b19adc59f05bb12')})
+      return res.json(conversations)
+    } catch (error) {
+      console.log('errors: ',error);
+      return res.sendStatus(404)
     }
   }
 
