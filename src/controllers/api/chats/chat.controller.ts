@@ -7,7 +7,7 @@ import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
 
 class ChatController {
   protected chat: ChatService;
-  protected user_id:Object;
+  protected user_id: Object;
 
   constructor() {
     this.chat = new ChatService();
@@ -16,7 +16,7 @@ class ChatController {
 
   async createConversation(req: Request, res: Response) {
     try {
-      const body:CreateConversationDTO = {...req.body,participant:this.user_id}
+      const body: CreateConversationDTO = { ...req.body, participant: this.user_id }
       await this.chat.createConversation(body);
       return res.sendStatus(201);
     } catch (error) {
@@ -28,34 +28,34 @@ class ChatController {
 
   async getConversations(req: Request, res: Response) {
     try {
-      const conversations = await this.chat.getConversations({user_id:this.user_id})
+      const conversations = await this.chat.getConversations({ user_id: this.user_id })
       return res.json(conversations)
     } catch (error) {
-      console.log('errors: ',error);
+      console.log('errors: ', error);
       return res.sendStatus(404)
     }
   }
 
   async joinConversation(req: Request, res: Response) {
     try {
-      const conversations = await this.chat.joinConversation({_id:req.params.id,participant:this.user_id})
+      const conversations = await this.chat.joinConversation({ _id: req.params.id, participant: this.user_id })
       return res.json(conversations)
     } catch (error) {
-      console.log('errors: ',error);
+      console.log('errors: ', error);
       return res.sendStatus(404)
     }
   }
 
   async sendMessage(req: Request, res: Response) {
     try {
-      const body:SendMessageDTO = {
+      const body: SendMessageDTO = {
         ...req.body,
-        sender:this.user_id,
-        conversation:req.params.conversation_id
+        sender: this.user_id,
+        conversation: req.params.conversation_id
       }
       console.log('====================================');
-      console.log('body:: ',body);
       console.log('====================================');
+
       await this.chat.sendMessage(body);
       return res.send(201);
     } catch (error) {
@@ -67,9 +67,9 @@ class ChatController {
 
   async getMessages(req: Request, res: Response) {
     try {
-      const body:GetMessagesDTO = {
+      const body: GetMessagesDTO = {
         ...req.body,
-        conversation_id:req.params.conversation_id
+        conversation_id: req.params.conversation_id
       }
       const data = await this.chat.getMessages(body);
       return res.json(data);

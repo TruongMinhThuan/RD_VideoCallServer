@@ -2,7 +2,7 @@ import express from 'express';
 import { validate } from 'src/validations';
 import { CreateConversationValidation } from '@validations/create-conversation.validation';
 import chatController from '../controllers/api/chats/chat.controller';
-import {isAuth} from 'src/middlewares/auth.middleware';
+import { isAuth } from 'src/middlewares/auth.middleware';
 
 const RoomRoute = express.Router();
 RoomRoute.post(
@@ -17,12 +17,13 @@ RoomRoute.get(
 );
 
 RoomRoute.post(
-  '/conversation/:id/join',
+  '/conversation/:id/join', isAuth,
   (req, res) => chatController.joinConversation(req, res),
 );
 
 RoomRoute.post(
-  '/conversation/:conversation_id/message',isAuth,(req, res) => chatController.sendMessage(req, res)
+  '/conversation/:conversation_id/message', isAuth,
+  (req, res) => chatController.sendMessage(req, res)
 );
 
 RoomRoute.get(
