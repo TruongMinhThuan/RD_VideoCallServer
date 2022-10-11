@@ -1,6 +1,7 @@
 export default class SendMessageDTO{
-    message_type:string
-    message:string
-    attachment_url:string
-    sender:object
+    type:Number
+    content:String
+    attachment_url:String
+    sender:Object
+    conversation:Object
 }
