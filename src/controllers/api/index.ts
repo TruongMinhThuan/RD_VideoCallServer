@@ -1,0 +1,1 @@
+export {default as ChatController} from './chats/chat.controller'

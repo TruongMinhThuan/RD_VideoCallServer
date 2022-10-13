@@ -34,8 +34,8 @@
       "@domain/*": [
         "src/domain/*"
       ],
-      "@controller/*": [
-        "src/controller/*"
+      "@controllers/*": [
+        "src/controllers/*"
       ],
       "@middleware/*": [
         "src/middleware/*"
@@ -48,8 +48,9 @@
       ]
     },
     "typeRoots": [
-      "@types"
-    ]
+      "src/types",
+      "./node_modules/@types"
+    ],
   },
   "include": [
     "src/**/*",
