@@ -1,22 +1,23 @@
 // import * as jwt from 'jsonwebtoken';
 
-import { ChatService } from '../../../services/ChatService';
+import { ChatService } from '../../../services';
 import { Response, Request, NextFunction } from 'express';
 import { CreateConversationDTO, SendMessageDTO } from '@dto/index';
 import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
 
 class ChatController {
-  protected chat: ChatService;
+  private chat: ChatService = new ChatService();
   protected user_id: Object;
 
   constructor() {
     this.chat = new ChatService();
-    this.user_id = '63425942f392ef38406f909d'
+    console.log('init:: chat controller');
+
   }
 
   async createConversation(req: Request, res: Response) {
     try {
-      const body: CreateConversationDTO = { ...req.body, participant: this.user_id }
+      const body: CreateConversationDTO = { ...req.body, participant: req.user._id }
       await this.chat.createConversation(body);
       return res.sendStatus(201);
     } catch (error) {
@@ -50,13 +51,10 @@ class ChatController {
     try {
       const body: SendMessageDTO = {
         ...req.body,
-        sender: this.user_id,
+        sender: req.user?.user_id,
         conversation: req.params.conversation_id
       }
-      console.log('====================================');
-      console.log('====================================');
-
-      await this.chat.sendMessage(body);
+      await this.chat.sendMessage(body)
       return res.send(201);
     } catch (error) {
       console.log('error: ', error);

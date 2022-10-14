@@ -1,0 +1,1 @@
+export { default as ContactController } from './contact.controller'

@@ -1,4 +1,5 @@
 export default class RegisterDTO {
-    username:string;
-    password:string;
+    username: string;
+    password: string;
+    avatar: string;
 }

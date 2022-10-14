@@ -23,6 +23,7 @@ export default class AuthenticationService extends BaseService {
 
   public async register(data: RegisterDTO) {
     try {
+      data.avatar = 'https://gravatar.com/avatar/a559e04ec28d672e668b6959fe1f8ee5?s=400&d=robohash&r=x'
       let user = await User.create(data);
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(user.password, salt);

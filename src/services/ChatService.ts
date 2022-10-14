@@ -1,9 +1,9 @@
 import JoinConversationDTO from '@dto/chat-conversation/JoinConversation.dto';
 import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
-import { CreateConversationDTO, getConversationsDTO, SendMessageDTO } from '@dto/index';
+import { CreateConversationDTO, getConversationsDTO, MakeFriendDTO, SendMessageDTO } from '@dto/index';
 import { ConversationParticipant, Message, Conversation } from '@models/index';
 
-export class ChatService {
+export default class ChatService {
 
 
   async createConversation(resource: CreateConversationDTO): Promise<any> {
@@ -15,6 +15,23 @@ export class ChatService {
     return true
   }
 
+  async makeFriend(resource: MakeFriendDTO): Promise<any> {
+
+    const friend = new ConversationParticipant()
+    friend.participant = resource.friend
+    await friend.save()
+    const author = new ConversationParticipant()
+    author.participant = resource.author
+    author.is_author = true
+    await author.save()
+    let conversation = new Conversation({ ...resource });
+    conversation.conversation_participants.push(friend)
+    conversation.conversation_participants.push(author)
+    await conversation.save()
+
+    return true
+  }
+
   async getConversations(resource: getConversationsDTO) {
 
     let conversations = await Conversation
@@ -22,9 +39,9 @@ export class ChatService {
       .populate({ path: 'conversation_participants.participant', select: 'username createdAt' })
       .populate({
         path: 'last_message',
-        populate:{
-          path:'sender',
-          select:'username'
+        populate: {
+          path: 'sender',
+          select: 'username'
         }
       })
     return conversations
@@ -64,8 +81,8 @@ export class ChatService {
     let messages = await Message
       .find({ conversation: resource.conversation_id })
       .populate({
-        path:'sender',
-        select:'username createdAt'
+        path: 'sender',
+        select: 'username createdAt'
       })
 
     console.log('message: ', messages);

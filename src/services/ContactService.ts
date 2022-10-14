@@ -8,8 +8,9 @@ export class ContactService {
 
 
     async getContacts(): Promise<any> {
-        const contacts = User.find({})
+        const contacts = await User.find({}).select('username createdAt')
         return contacts
     }
+
 
 }
