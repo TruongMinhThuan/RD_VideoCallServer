@@ -19,31 +19,52 @@ export default class ChatService {
 
     const friend = new ConversationParticipant()
     friend.participant = resource.friend
-    await friend.save()
     const author = new ConversationParticipant()
     author.participant = resource.author
-    author.is_author = true
+    const connection_id = `${author.participant}-${friend.participant}`
+    const existConversation = await this.getFriendConnection(connection_id)
+    if (existConversation) {
+      return existConversation
+    }
+    await friend.save()
     await author.save()
-    let conversation = new Conversation({ ...resource });
+    let conversation = new Conversation();
+    conversation.connection_id = connection_id
     conversation.conversation_participants.push(friend)
     conversation.conversation_participants.push(author)
+    const lastMessage = new Message({ content: `Say hi to you`, conversation: conversation._id, sender: author.participant })
+    lastMessage.save()
+    conversation.last_message = Object(lastMessage._id)
     await conversation.save()
 
-    return true
+    return conversation.toJSON()
+  }
+
+  private async getFriendConnection(connection_id: String): Promise<any> {
+    const converation = await Conversation.findOne({ connection_id })
+    console.log('====================================');
+    console.log('isExists: ', converation);
+    console.log('====================================');
+    if (!converation) {
+      return false
+    }
+    return converation
   }
 
   async getConversations(resource: getConversationsDTO) {
 
     let conversations = await Conversation
       .find({ 'conversation_participants.participant': resource.user_id })
+      .sort({ updatedAt: 'descending' })
       .populate({ path: 'conversation_participants.participant', select: 'username createdAt' })
       .populate({
         path: 'last_message',
         populate: {
-          path: 'sender',
+          path: 'sender receiver',
           select: 'username'
-        }
+        },
       })
+
     return conversations
   }
 
@@ -67,7 +88,8 @@ export default class ChatService {
     let message = new Message(resource)
     message = await message.save()
     await Conversation.findByIdAndUpdate(message.conversation, {
-      last_message: message
+      last_message: message,
+      updatedAt: Date.now
     })
 
     console.log('message: ', message);

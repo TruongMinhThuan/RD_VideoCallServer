@@ -6,11 +6,11 @@ import { isAuth } from 'src/middlewares/auth.middleware';
 const RoomRoute = express.Router();
 RoomRoute.post('/conversation', isAuth, (req, res) => ChatController.createConversation(req, res));
 
-RoomRoute.get('/conversations', (req, res) => ChatController.getConversations(req, res));
+RoomRoute.get('/conversations', isAuth, (req, res) => ChatController.getConversations(req, res));
 
 RoomRoute.post('/conversation/:id/join', isAuth, ChatController.joinConversation);
 
-RoomRoute.post('/conversation/:conversation_id/message', (req, res) => ChatController.sendMessage(req, res));
+RoomRoute.post('/conversation/:conversation_id/message', isAuth, (req, res) => ChatController.sendMessage(req, res));
 
 RoomRoute.get('/conversation/:conversation_id/messages', (req, res) => ChatController.getMessages(req, res));
 

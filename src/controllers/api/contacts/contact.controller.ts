@@ -43,10 +43,13 @@ export class ContactController {
 
     async makeFriends(req: Request, res: Response) {
         try {
-            console.log('input: ',req.params.friend_id);
-            
+            console.log('input: ', req.params.friend_id);
+
             const body: MakeFriendDTO = { ...req.body, author: req.user?.user_id, friend: req.params.friend_id }
             const data = await this.chat.makeFriend(body)
+            console.log('====================================');
+            console.log('making friends: ', data);
+            console.log('====================================');
             return res.status(200).send(data)
         } catch (error) {
             console.log('error: ', error);
