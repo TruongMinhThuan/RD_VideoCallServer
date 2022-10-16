@@ -39,11 +39,9 @@ export const isAuth = (req?: Request, res?: Response, next?: NextFunction) => {
         }
 
         const decoded = jwt.verify(token?.replace('Bearer ', ''), 'secret');
-        console.log('====================================');
-        console.log('user:: ', decoded);
+
         req.user = decoded
         // console.log('auth roles:: ',allowRoles);
-        console.log('====================================');
         next();
     } catch (err) {
         console.log('====================================');

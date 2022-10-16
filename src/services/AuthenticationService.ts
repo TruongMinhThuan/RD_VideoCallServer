@@ -10,7 +10,7 @@ export default class AuthenticationService extends BaseService {
 
   public async login(data: LoginDTO) {
     try {
-      const user = await User.findOne({ username: data.username });
+      const user = await User.findOne({ username: data.username?.toLowerCase() });
       const isAuth = await bcrypt.compare(data.password, user.password);
       if (!isAuth) {
         throw Error('Invalid User');

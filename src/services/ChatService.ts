@@ -2,9 +2,13 @@ import JoinConversationDTO from '@dto/chat-conversation/JoinConversation.dto';
 import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
 import { CreateConversationDTO, getConversationsDTO, MakeFriendDTO, SendMessageDTO } from '@dto/index';
 import { ConversationParticipant, Message, Conversation } from '@models/index';
+import ChatSocketService from './ChatSocketService';
 
 export default class ChatService {
+  private chatSocket = new ChatSocketService()
+  constructor() {
 
+  }
 
   async createConversation(resource: CreateConversationDTO): Promise<any> {
     let conversationParticipant = new ConversationParticipant({ ...resource, is_author: true })
@@ -42,9 +46,6 @@ export default class ChatService {
 
   private async getFriendConnection(connection_id: String): Promise<any> {
     const converation = await Conversation.findOne({ connection_id })
-    console.log('====================================');
-    console.log('isExists: ', converation);
-    console.log('====================================');
     if (!converation) {
       return false
     }
@@ -87,27 +88,23 @@ export default class ChatService {
     console.log('====================================');
     let message = new Message(resource)
     message = await message.save()
+    this.chatSocket.emitMessage('Hello')
     await Conversation.findByIdAndUpdate(message.conversation, {
       last_message: message,
       updatedAt: Date.now
     })
-
-    console.log('message: ', message);
-    return true;
+    return message.toJSON();
   }
 
   async getMessages(resource: GetMessagesDTO) {
-    console.log('====================================');
-    console.log('message input: ', resource);
-    console.log('====================================');
     let messages = await Message
       .find({ conversation: resource.conversation_id })
+      .sort({ sent_datetime: 'descending' })
       .populate({
         path: 'sender',
         select: 'username createdAt'
       })
 
-    console.log('message: ', messages);
     return messages;
   }
 }

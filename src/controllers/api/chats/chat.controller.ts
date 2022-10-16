@@ -30,7 +30,7 @@ class ChatController {
   async getConversations(req: Request, res: Response) {
     try {
       console.log('====================================');
-      console.log('auth: ',req.user);
+      console.log('auth: ', req.user);
       console.log('====================================');
       const conversations = await this.chat.getConversations({ user_id: req.user.user_id })
       return res.json(conversations)
@@ -57,11 +57,9 @@ class ChatController {
         sender: req.user?.user_id,
         conversation: req.params.conversation_id
       }
-      await this.chat.sendMessage(body)
-      return res.send(201);
+      const message = await this.chat.sendMessage(body)
+      return res.json(message).status(201)
     } catch (error) {
-      console.log('error: ', error);
-
       return res.send(404);
     }
   }

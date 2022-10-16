@@ -9,6 +9,8 @@ const MessageSchema = new mongoose.Schema({
   attachment_url: String,
   sent_datetime: { type: Date, default: Date.now },
   conversation: { type: mongoose.Types.ObjectId, ref: 'Conversation' }
+}, {
+  timestamps: true
 });
 
 const Message = mongoose.model('Message', MessageSchema);

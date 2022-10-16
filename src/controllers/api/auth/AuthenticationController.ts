@@ -13,10 +13,16 @@ class AuthenticationController extends BaseController {
 
   async login(req: Request, res: Response) {
     try {
+      console.log('====================================');
+      console.log('input: ',req.body);
+      console.log('====================================');
       const auth = new AuthenticationService();
       const user = await auth.login(req.body);
       return res.json(user);
     } catch (error) {
+      console.log('====================================');
+      console.log('error: ',error);
+      console.log('====================================');
       return res.send(404);
     }
   }
