@@ -88,7 +88,6 @@ export default class ChatService {
     console.log('====================================');
     let message = new Message(resource)
     message = await message.save()
-    this.chatSocket.emitMessage('Hello')
     await Conversation.findByIdAndUpdate(message.conversation, {
       last_message: message,
       updatedAt: Date.now
