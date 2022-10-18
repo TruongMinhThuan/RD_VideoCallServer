@@ -1,4 +1,14 @@
 import mongoose from '../provider/Database';
+import paginate from 'mongoose-paginate-v2';
+
+// declare your schema
+export const institutionSchema = new mongoose.Schema({ name: String });
+
+// paginate with this plugin
+institutionSchema.plugin(paginate);
+
+// declare a mongoose document based on a Typescript interface representing your schema
+interface MessageDocument extends mongoose.Document { }
 
 // Define the Conversation Schema
 const MessageSchema = new mongoose.Schema({
@@ -13,6 +23,6 @@ const MessageSchema = new mongoose.Schema({
   timestamps: true
 });
 
-const Message = mongoose.model('Message', MessageSchema);
+const Message = mongoose.model<MessageDocument, mongoose.PaginateModel<MessageDocument>>('Message', MessageSchema);
 
 export default Message;

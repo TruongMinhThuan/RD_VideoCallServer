@@ -66,11 +66,15 @@ class ChatController {
 
   async getMessages(req: Request, res: Response) {
     try {
+      console.log('host:: ', `${req.originalUrl}/${req.path}`);
+
       const body: GetMessagesDTO = {
         ...req.body,
-        conversation_id: req.params.conversation_id
+        conversation_id: req.params.conversation_id,
+        page: Number(req.query.page) || 1,
+        limit: Number(req.query.limit) || 25
       }
-      const data = await this.chat.getMessages(body);
+      const data = await this.chat.getMessages(body, req);
       return res.json(data);
     } catch (error) {
       console.log('error: ', error);

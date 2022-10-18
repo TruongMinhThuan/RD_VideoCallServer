@@ -2,6 +2,7 @@ import JoinConversationDTO from '@dto/chat-conversation/JoinConversation.dto';
 import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
 import { CreateConversationDTO, getConversationsDTO, MakeFriendDTO, SendMessageDTO } from '@dto/index';
 import { ConversationParticipant, Message, Conversation } from '@models/index';
+import { Request } from 'express';
 import ChatSocketService from './ChatSocketService';
 
 export default class ChatService {
@@ -88,14 +89,15 @@ export default class ChatService {
     console.log('====================================');
     let message = new Message(resource)
     message = await message.save()
-    await Conversation.findByIdAndUpdate(message.conversation, {
-      last_message: message,
+    await Conversation.findByIdAndUpdate(resource.conversation, {
+      last_message: { ...message, receiver: message },
       updatedAt: Date.now
     })
     return message.toJSON();
   }
 
-  async getMessages(resource: GetMessagesDTO) {
+  async getMessages(resource: GetMessagesDTO, req: Request) {
+    let nextPage = `http://192.168.1.6:3000` + req.baseUrl + req.path;
     let messages = await Message
       .find({ conversation: resource.conversation_id })
       .sort({ sent_datetime: 'descending' })
@@ -103,7 +105,15 @@ export default class ChatService {
         path: 'sender',
         select: 'username createdAt'
       })
+      .skip(resource.limit * (resource.page - 1))
+      .limit(resource.limit)
 
-    return messages;
+    return {
+      data: messages,
+      page: resource.page,
+      perpage: resource.limit,
+      total: messages.length,
+      next_page: messages.length > 0 ? `${nextPage}?page=${resource.page + 1}&limit=${resource.limit}` : null
+    };
   }
 }

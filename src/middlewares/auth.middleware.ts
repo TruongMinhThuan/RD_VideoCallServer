@@ -33,6 +33,7 @@ export const isAuth = (req?: Request, res?: Response, next?: NextFunction) => {
     try {
         const token: string =
             req.body?.token || req.query?.token || req.header('Authorization')
+        console.log('token:: ', token);
 
         if (!token) {
             throw new Error();
@@ -47,7 +48,7 @@ export const isAuth = (req?: Request, res?: Response, next?: NextFunction) => {
         console.log('====================================');
         console.log('error: ', err);
         console.log('====================================');
-        res.sendStatus(401).send('ds');
+        res.status(401).send({ message: 'Unauthentication' });
     }
 }
 
