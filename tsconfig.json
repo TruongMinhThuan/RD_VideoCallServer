@@ -45,6 +45,9 @@
       ],
       "@validations/*": [
         "src/validations/*"
+      ],
+      "@services/*": [
+        "src/services/*"
       ]
     },
     "typeRoots": [

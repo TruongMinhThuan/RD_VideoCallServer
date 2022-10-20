@@ -2,6 +2,8 @@ import WebSocket, { WebSocketServer, Event } from 'ws';
 import { v4 } from 'uuid';
 import { IncomingMessage } from 'http';
 import { Server, Socket } from 'socket.io';
+import ChatSocketServices from '@services/ChatSocketServices';
+import { ChatSocketController } from '@controllers/socket/chats/chatSocket.controller';
 
 interface ServerToClientEvents {
   noArg: () => void;
@@ -47,49 +49,9 @@ class Websocket {
 
   public async init(): Promise<any> {
 
-    // wss.on("connection", (socket) => {
-    //   console.log(socket.id); // ojIckSD2jqNzOqIrAGzL
-    // });
-
     wss.on('connection', ((socket) => {
-      console.log('connected to websocket...');
-      // const myURL = new URL(socket.request.headers.host);
-      // console.log('params:: ', myURL.searchParams.get('user_id'))
-      // let a = new URL(req.url, `http://${req.headers.host}`);
-
-      // console.log('user: ', a.searchParams.get('user_id'));
-      const { client_uuid, conversation_id } = this.getConnectionParams(socket.request)
-      if (conversation_id) {
-        socket.join(conversation_id)
-      }
-      // Websocket.clients.set(client_uuid, { id: client_uuid, client: socket })
-      console.log('client [%s] connected to conversation: [%s]', client_uuid, conversation_id);
-      socket.on('message', (message) => {
-        console.log('client message : ', message);
-        socket.to(conversation_id).emit('message', message)
-
-      })
-
-
-      // socket.request.headers.host
-      // socket.emit('basicEmit', 1, 'hehhe')
-      // client .on('message', (data) => {
-      //   console.log('ws data:: ', data);
-      //   console.log('ws clients:: ', Websocket.clients.size);
-      //   const userSocket: WebSocket = Websocket.clients.get(client_uuid)?.ws
-      //   if (userSocket) {
-      //     console.log('user socket:: ', userSocket);
-      //     userSocket.send('hahahaha')
-      //   }
-      //   ws.emit('room1', { message: 'hello world' })
-      // });
-
-      // ws.on('close', () => {
-      //   Websocket.clients.delete(client_uuid)
-      //   console.log(`${client_uuid} disconnected: `, Websocket.clients.size);
-
-      // })
-
+      console.log('An user has connected to socket...');
+      new ChatSocketController(socket)
     }));
 
   }

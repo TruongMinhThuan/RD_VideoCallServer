@@ -4,6 +4,8 @@ import { CreateConversationDTO, getConversationsDTO, MakeFriendDTO, SendMessageD
 import { ConversationParticipant, Message, Conversation } from '@models/index';
 import { Request } from 'express';
 import ChatSocketService from './ChatSocketService';
+import ip from 'ip'
+import Networking from './Networking';
 
 export default class ChatService {
   private chatSocket = new ChatSocketService()
@@ -84,9 +86,6 @@ export default class ChatService {
   }
 
   async sendMessage(resource: SendMessageDTO) {
-    console.log('====================================');
-    console.log('message input: ', resource);
-    console.log('====================================');
     let message = new Message(resource)
     message = await message.save()
     await Conversation.findByIdAndUpdate(resource.conversation, {
@@ -97,7 +96,7 @@ export default class ChatService {
   }
 
   async getMessages(resource: GetMessagesDTO, req: Request) {
-    let nextPage = `http://192.168.1.6:3000` + req.baseUrl + req.path;
+    let nextPage = `http://${Networking.getIpAddress()}:3000` + req.baseUrl + req.path;
     let messages = await Message
       .find({ conversation: resource.conversation_id })
       .sort({ sent_datetime: 'descending' })

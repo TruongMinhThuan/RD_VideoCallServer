@@ -66,8 +66,6 @@ class ChatController {
 
   async getMessages(req: Request, res: Response) {
     try {
-      console.log('host:: ', `${req.originalUrl}/${req.path}`);
-
       const body: GetMessagesDTO = {
         ...req.body,
         conversation_id: req.params.conversation_id,
