@@ -25,28 +25,29 @@ class App {
 	// }
 
 	// Loads your Server
-	public loadServer (): void {
+	public loadServer(): void {
 		// Log.info('Server :: Booting @ Master...');
 		Express.init();
 	}
 
 	// Loads the Database Pool
-	public loadDatabase (): void {
+	public loadDatabase(): void {
 		// Log.info('Database :: Booting @ Master...');
 		Database.init();
 	}
 
 	// Loads the Worker Cluster
-	public loadWorker (): void {
+	public loadWorker(): void {
 		// Log.info('Worker :: Booting @ Master...');
 	}
 
-	public loadWebsocket ():void{
+	public loadWebsocket(): void {
 		console.log('websocket');
-		WebSocket.init()
+		const socket = new WebSocket()
+		socket.init()
 		// WebSocket.on('connection',(ws)=>{
 		// 	console.log('connected to websocket...');
-			
+
 		// 	ws.on('message',(data)=>{
 		// 		console.log('ws data:: ',data);
 		// 	})

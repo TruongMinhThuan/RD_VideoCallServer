@@ -53,8 +53,6 @@ class Express {
         // parse application/json
         this.express.use(bodyParser.json())
         this.express.use(multer().any())
-    
-
 
          // Registering Exception / Error Handlers
         //  this.express.use(ExceptionHandler.logErrors);

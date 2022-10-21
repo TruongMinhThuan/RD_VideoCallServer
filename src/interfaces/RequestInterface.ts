@@ -1,5 +1,5 @@
-import { Request } from "express"
-export interface BaseRequest extends Request {
-
+import { Request as ExpressRequest } from "express"
+export interface Request extends ExpressRequest {
+    user: any
 }
 

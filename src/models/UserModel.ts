@@ -1,6 +1,3 @@
-import crypto from 'crypto';
-import bcrypt from 'bcrypt';
-
 import mongoose from '../provider/Database';
 
 // Create the model schema & register your custom methods here
@@ -17,6 +14,7 @@ export const UserSchema = new mongoose.Schema(
     username: { type: String, unique: true },
     password: { type: String },
     token: { type: String },
+    avatar: { type: String, require: false }
   },
   { timestamps: true },
 );
