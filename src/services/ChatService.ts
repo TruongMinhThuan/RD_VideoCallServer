@@ -3,12 +3,10 @@ import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
 import { CreateConversationDTO, getConversationsDTO, MakeFriendDTO, SendMessageDTO } from '@dto/index';
 import { ConversationParticipant, Message, Conversation } from '@models/index';
 import { Request } from 'express';
-import ChatSocketService from './ChatSocketService';
 import ip from 'ip'
 import Networking from './Networking';
 
 export default class ChatService {
-  private chatSocket = new ChatSocketService()
   constructor() {
 
   }
@@ -56,11 +54,15 @@ export default class ChatService {
   }
 
   async getConversations(resource: getConversationsDTO) {
+    console.log('auth:: ', resource.user_id);
 
     let conversations = await Conversation
-      .find({ 'conversation_participants.participant': resource.user_id })
+      .find({ connection_id: { $regex: resource.user_id } })
       .sort({ updatedAt: 'descending' })
-      .populate({ path: 'conversation_participants.participant', select: 'username createdAt' })
+      .populate({
+        path: 'conversation_participants.participant',
+        select: 'username createdAt',
+      })
       .populate({
         path: 'last_message',
         populate: {

@@ -31,16 +31,27 @@ export class ChatSocketController {
             this._socket.on(room, (message) => {
                 console.log('room  ', `${room}`);
                 console.log('client message : ', message);
-    
+
                 this._socket.to(room).emit('message', message)
+                message.participants.map((e: any) => {
+                    
+                    this._socket.broadcast.emit(`broadcast-${e._id}`, message)
+                    console.log('broadcast:: ',e._id);
+                })
             })
         })
 
         this._socket.on('room:leave', (roomId) => {
-            this._socket.leave(roomId)
             console.log(`${this.chatSocketServices._client_uuid} has left room ${roomId} `);
+            this._socket.leave(roomId)
 
         })
+
+        this._socket.on('message', (message) => {
+            console.log('conversation message: ', message);
+
+        })
+
     }
 
     private handleSocketDisconnection() {
