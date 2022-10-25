@@ -5,7 +5,8 @@ import { ConversationParticipant, Message, Conversation } from '@models/index';
 import { Request } from 'express';
 import ip from 'ip'
 import Networking from './Networking';
-
+import { v4 } from 'uuid'
+import AddConversationParticipantDTO from '@dto/chat-conversation/AddConversationParticipant.dto';
 export default class ChatService {
   constructor() {
 
@@ -17,7 +18,17 @@ export default class ChatService {
     let conversation = new Conversation({ ...resource });
     conversation.conversation_participants.push(conversationParticipant)
     conversation = await conversation.save();
-    return true
+    return conversation
+  }
+
+  async createConversationRoom(resource: CreateConversationDTO): Promise<any> {
+    let conversation = new Conversation({ name: resource.name, connection_id: `${v4().toString()}-${resource.participant}` });
+    conversation = await conversation.save();
+    return conversation
+  }
+
+  async addConversationParticipants(resource: AddConversationParticipantDTO) {
+    const conversation = await Conversation.findById(resource.conversation_id)
   }
 
   async makeFriend(resource: MakeFriendDTO): Promise<any> {
@@ -54,7 +65,6 @@ export default class ChatService {
   }
 
   async getConversations(resource: getConversationsDTO) {
-    console.log('auth:: ', resource.user_id);
 
     let conversations = await Conversation
       .find({ connection_id: { $regex: resource.user_id } })

@@ -14,5 +14,6 @@ RoomRoute.post('/conversation/:conversation_id/message', isAuth, (req, res) => C
 
 RoomRoute.get('/conversation/:conversation_id/messages', (req, res) => ChatController.getMessages(req, res));
 
+RoomRoute.post('/conversation-room', isAuth, (req, res) => ChatController.createConversationRoom(req, res));
 
 export default RoomRoute;

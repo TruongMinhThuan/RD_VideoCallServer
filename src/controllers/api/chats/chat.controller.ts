@@ -18,8 +18,22 @@ class ChatController {
   async createConversation(req: Request, res: Response) {
     try {
       const body: CreateConversationDTO = { ...req.body, participant: req.user._id }
-      await this.chat.createConversation(body);
-      return res.sendStatus(201);
+      const data = await this.chat.createConversation(body);
+      return res.status(201).json(data);
+    } catch (error) {
+      console.log('error: ', error);
+
+      return res.sendStatus(404);
+    }
+  }
+
+  async createConversationRoom(req: Request, res: Response) {
+    try {
+      console.log('create room: ',req.user.user_id);
+      
+      const body: CreateConversationDTO = { ...req.body, participant: req.user.user_id }
+      const data = await this.chat.createConversationRoom(body);
+      return res.status(201).json(data);
     } catch (error) {
       console.log('error: ', error);
 
