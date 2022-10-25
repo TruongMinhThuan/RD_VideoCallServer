@@ -5,7 +5,7 @@ import { ConversationParticipantSchema } from './conversation-participant.model'
 const ConversationSchema = new mongoose.Schema({
   name: { type: String, unique: false },
   last_message: { type: mongoose.Types.ObjectId, ref: 'Message' },
-  conversation_participants: [],
+  conversation_participants: [{ type: mongoose.Types.ObjectId, ref: 'ConversationParticipant' }],
   connection_id: { type: String, require: false, index: true }
 }, {
   timestamps: true,

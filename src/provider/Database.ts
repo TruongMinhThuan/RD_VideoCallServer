@@ -5,7 +5,7 @@ import Locals from './Locals';
 export class Database {
 	// Initialize your database pool
 	public static init(): any {
-		const dsn = Locals.config().mongooseUrl || 'mongodb+srv://root:root@cluster0.rgzpkc8.mongodb.net/?retryWrites=true&w=majority';
+		const dsn = Locals.config().mongooseUrl || 'mongodb+srv://root:root@cluster0.rgzpkc8.mongodb.net/test2?retryWrites=true&w=majority';
 		const options: MongooseOptions = {
 			autoIndex: true, //make this also true
 

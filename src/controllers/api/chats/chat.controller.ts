@@ -4,6 +4,7 @@ import { ChatService } from '../../../services';
 import { Response, Request, NextFunction } from 'express';
 import { CreateConversationDTO, SendMessageDTO } from '@dto/index';
 import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
+import AddConversationParticipantDTO from '@dto/chat-conversation/AddConversationParticipant.dto';
 
 class ChatController {
   private chat: ChatService = new ChatService();
@@ -29,10 +30,23 @@ class ChatController {
 
   async createConversationRoom(req: Request, res: Response) {
     try {
-      console.log('create room: ',req.user.user_id);
-      
+      console.log('create room: ', req.user.user_id);
+
       const body: CreateConversationDTO = { ...req.body, participant: req.user.user_id }
       const data = await this.chat.createConversationRoom(body);
+      return res.status(201).json(data);
+    } catch (error) {
+      console.log('error: ', error);
+
+      return res.sendStatus(404);
+    }
+  }
+
+  async addConversationRoomParticipants(req: Request, res: Response) {
+    try {
+      const body: AddConversationParticipantDTO = { ...req.body, conversation_id: req.params.conversation_id }
+      console.log('body:: ', body);
+      const data = await this.chat.addConversationParticipants(body);
       return res.status(201).json(data);
     } catch (error) {
       console.log('error: ', error);
