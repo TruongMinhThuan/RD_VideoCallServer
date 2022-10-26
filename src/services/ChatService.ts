@@ -3,12 +3,11 @@ import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
 import { CreateConversationDTO, getConversationsDTO, MakeFriendDTO, SendMessageDTO } from '@dto/index';
 import { ConversationParticipant, Message, Conversation } from '@models/index';
 import { Request } from 'express';
-import ChatSocketService from './ChatSocketService';
 import ip from 'ip'
 import Networking from './Networking';
-
+import { v4 } from 'uuid'
+import AddConversationParticipantDTO from '@dto/chat-conversation/AddConversationParticipant.dto';
 export default class ChatService {
-  private chatSocket = new ChatSocketService()
   constructor() {
 
   }
@@ -17,9 +16,36 @@ export default class ChatService {
     let conversationParticipant = new ConversationParticipant({ ...resource, is_author: true })
     conversationParticipant = await conversationParticipant.save()
     let conversation = new Conversation({ ...resource });
-    conversation.conversation_participants.push(conversationParticipant)
+    conversation.conversation_participants.push(Object(conversationParticipant._id))
     conversation = await conversation.save();
-    return true
+    return conversation
+  }
+
+  async createConversationRoom(resource: CreateConversationDTO): Promise<any> {
+    let conversation = new Conversation({ name: resource.name, connection_id: `${v4().toString()}-${resource.participant}` });
+    conversation.conversation_participants.push(resource.participant)
+    conversation = await conversation.save();
+    return conversation
+  }
+
+  async addConversationParticipants(resource: AddConversationParticipantDTO) {
+    const conversation = await Conversation.findByIdAndUpdate(resource.conversation_id,
+      { $push: { conversation_participants: [...resource.participants] } }
+    ).populate({
+      path: 'conversation_participants',
+      populate: {
+        path: 'participant',
+        select: 'username'
+      },
+    })
+      .populate({
+        path: 'last_message',
+        populate: {
+          path: 'sender receiver',
+          select: 'username'
+        },
+      })
+    return conversation
   }
 
   async makeFriend(resource: MakeFriendDTO): Promise<any> {
@@ -37,8 +63,8 @@ export default class ChatService {
     await author.save()
     let conversation = new Conversation();
     conversation.connection_id = connection_id
-    conversation.conversation_participants.push(friend)
-    conversation.conversation_participants.push(author)
+    conversation.conversation_participants.push(Object(friend._id))
+    conversation.conversation_participants.push(Object(author._id))
     const lastMessage = new Message({ content: `Say hi to you`, conversation: conversation._id, sender: author.participant })
     lastMessage.save()
     conversation.last_message = Object(lastMessage._id)
@@ -58,9 +84,15 @@ export default class ChatService {
   async getConversations(resource: getConversationsDTO) {
 
     let conversations = await Conversation
-      .find({ 'conversation_participants.participant': resource.user_id })
+      .find({ conversation_participants: { $all: [resource.user_id] } })
       .sort({ updatedAt: 'descending' })
-      .populate({ path: 'conversation_participants.participant', select: 'username createdAt' })
+      .populate({
+        path: 'conversation_participants',
+        populate: {
+          path: 'participant',
+          select: 'username'
+        },
+      })
       .populate({
         path: 'last_message',
         populate: {
@@ -74,15 +106,15 @@ export default class ChatService {
 
   async joinConversation(resource: JoinConversationDTO) {
     let conversation = await Conversation.findById(resource._id)
-    const isExisted = conversation.conversation_participants?.find(e => e.participant?.toString() == resource.participant)
+    const isExisted = conversation.conversation_participants[Object(resource.participant)]
     if (isExisted) {
       return false
     }
     let conversationParticipant = new ConversationParticipant({ conversation: conversation, participant: resource.participant })
     conversationParticipant.save()
-    conversation.conversation_participants.push(conversationParticipant)
+    conversation.conversation_participants.push(Object(conversationParticipant._id))
     conversation.save()
-    return true
+    return conversation
   }
 
   async sendMessage(resource: SendMessageDTO) {
