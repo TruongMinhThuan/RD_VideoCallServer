@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./src/index.ts",
-    "dev": "ts-node-dev --respawn --pretty --transpile-only src/index.ts"
+    "dev": "ts-node-dev --respawn --pretty --transpile-only src/index.ts",
+    "pm2": "pm2 start ./src/index.ts --watch"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

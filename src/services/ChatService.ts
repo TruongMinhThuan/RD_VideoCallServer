@@ -84,7 +84,7 @@ export default class ChatService {
   async getConversations(resource: getConversationsDTO) {
 
     let conversations = await Conversation
-      .find({ conversation_participants: { $all: [resource.user_id] } })
+      .find({ conversation_participants: { $in: [resource.user_id] } })
       .sort({ updatedAt: 'descending' })
       .populate({
         path: 'conversation_participants',
