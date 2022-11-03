@@ -67,8 +67,8 @@ export default class ChatService {
     await author.save()
     let conversation = new Conversation();
     conversation.connection_id = connection_id
-    conversation.conversation_participants.push(Object(friend._id))
-    conversation.conversation_participants.push(Object(author._id))
+    conversation.conversation_participants.push(Object(author.participant))
+    conversation.conversation_participants.push(Object(friend.participant))
     const lastMessage = new Message({ content: `Say hi to you`, conversation: conversation._id, sender: author.participant })
     lastMessage.save()
     conversation.last_message = Object(lastMessage._id)

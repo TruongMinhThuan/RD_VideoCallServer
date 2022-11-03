@@ -58,9 +58,6 @@ class ChatController {
 
   async getConversations(req: Request, res: Response) {
     try {
-      console.log('====================================');
-      console.log('auth: ', req.user);
-      console.log('====================================');
       const conversations = await this.chat.getConversations({ user_id: req.user.user_id })
       return res.json(conversations)
     } catch (error) {
