@@ -1,8 +1,8 @@
 import ChatSocketServices from "@services/ChatSocketServices";
 import { Socket } from "socket.io";
 
-let offerData:object
-let streamUrl:string = null
+let offerData: object
+let streamUrl: string = null
 export class ChatSocketController {
 
     _socket: Socket
@@ -48,17 +48,22 @@ export class ChatSocketController {
             console.log('conversation message: ', message);
         })
 
-        this._socket.on('room:call-video', (data) => {
+        this._socket.on('room:videoroom-offer', (data) => {
             offerData = data.offer
-          
+
             console.log('====================================');
             console.log('call data: ', data);
             console.log('offer: ', offerData);
             console.log('====================================');
         })
 
+        this._socket.on('room:videoroom-join', () => {
+            console.log('join video room');
+            this._socket.emit('videoroom:client-join-room', offerData)
+        })
+
         this._socket.on('stream', (data) => {
-            if(streamUrl === null){
+            if (streamUrl === null) {
                 streamUrl = data.streamUrl
             }
             console.log('====================================');
@@ -66,11 +71,12 @@ export class ChatSocketController {
             console.log('====================================');
         })
 
-        this._socket.on('room:join-video-call', (data) => {
+        this._socket.on('videoroom:join', (data) => {
             console.log('====================================');
-            console.log('join offer:: ',offerData);
+            console.log('join offer:: ', data.offer);
+            console.log('join offer:: ', data.streamUrl);
             console.log('====================================');
-            this._socket.emit('room:join-video-call-offer',{offer:offerData,stream:streamUrl})
+            this._socket.emit('videoroom:add-participant', { answer: data.offer, streamUrl: data.streamUrl })
         })
 
     }
