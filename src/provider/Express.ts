@@ -49,7 +49,8 @@ class Express {
         // parse various different custom JSON types as JSON
 
         // parse application/x-www-form-urlencoded
-        this.express.use(bodyParser.urlencoded())
+        this.express.use(bodyParser.urlencoded({extended:true}))
+        this.express.use(express.json())
         // parse application/json
         this.express.use(bodyParser.json())
         this.express.use(multer().any())
