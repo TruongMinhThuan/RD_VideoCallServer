@@ -71,5 +71,6 @@ class Express {
     }
 }
 
+
 /** Export the express module */
 export default new Express;
