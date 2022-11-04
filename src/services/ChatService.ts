@@ -7,6 +7,10 @@ import ip from 'ip'
 import Networking from './Networking';
 import { v4 } from 'uuid'
 import AddConversationParticipantDTO from '@dto/chat-conversation/AddConversationParticipant.dto';
+import VideoRoom from '@models/videoroom.model';
+import CreateVideoRoomDTO from '@dto/video-room/CreateVideoRoom.dto';
+import DeleteVideoRoomDTO from '@dto/video-room/DeleteVideoRoom.dto';
+import UpdateVideoRoomDTO from '@dto/video-room/UpdateVideoRoom.dto';
 export default class ChatService {
   constructor() {
 
@@ -63,8 +67,8 @@ export default class ChatService {
     await author.save()
     let conversation = new Conversation();
     conversation.connection_id = connection_id
-    conversation.conversation_participants.push(Object(friend._id))
-    conversation.conversation_participants.push(Object(author._id))
+    conversation.conversation_participants.push(Object(author.participant))
+    conversation.conversation_participants.push(Object(friend.participant))
     const lastMessage = new Message({ content: `Say hi to you`, conversation: conversation._id, sender: author.participant })
     lastMessage.save()
     conversation.last_message = Object(lastMessage._id)
@@ -146,5 +150,31 @@ export default class ChatService {
       total: messages.length,
       next_page: messages.length > 0 ? `${nextPage}?page=${resource.page + 1}&limit=${resource.limit}` : null
     };
+  }
+
+  async createVideoRoom(resource: CreateVideoRoomDTO) {
+    let videoRoom = new VideoRoom()
+    videoRoom.offer = resource.offer
+    videoRoom.save()
+
+    return videoRoom
+  }
+
+  async updateVideoRoom(resource: UpdateVideoRoomDTO) {
+    console.log('update data:: ', resource);
+    let videoRoom = await VideoRoom.findById(resource.roomId)
+    videoRoom.answer = resource.answer
+    videoRoom.save()
+    return videoRoom
+  }
+
+  async getVideoRooms() {
+    let videoRooms = await VideoRoom.find({})
+    return videoRooms
+  }
+
+  async deleteVideoRoom(resource: DeleteVideoRoomDTO) {
+    await (await VideoRoom.findById(resource.roomId)).delete()
+    return true
   }
 }

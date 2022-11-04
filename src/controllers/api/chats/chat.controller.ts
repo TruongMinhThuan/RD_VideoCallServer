@@ -5,6 +5,7 @@ import { Response, Request, NextFunction } from 'express';
 import { CreateConversationDTO, SendMessageDTO } from '@dto/index';
 import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
 import AddConversationParticipantDTO from '@dto/chat-conversation/AddConversationParticipant.dto';
+import DeleteVideoRoomDTO from '@dto/video-room/DeleteVideoRoom.dto';
 
 class ChatController {
   private chat: ChatService = new ChatService();
@@ -57,9 +58,6 @@ class ChatController {
 
   async getConversations(req: Request, res: Response) {
     try {
-      console.log('====================================');
-      console.log('auth: ', req.user);
-      console.log('====================================');
       const conversations = await this.chat.getConversations({ user_id: req.user.user_id })
       return res.json(conversations)
     } catch (error) {
@@ -108,6 +106,56 @@ class ChatController {
       return res.send(404);
     }
   }
+
+  async createVideoRoom(req: Request, res: Response) {
+    try {
+      const data = await this.chat.createVideoRoom(req.body)
+      return res.json(data);
+    } catch (error) {
+      console.log('error: ', error);
+
+      return res.send(404);
+    }
+  }
+
+  async updateVideoRoom(req: Request, res: Response) {
+    try {
+      const data = await this.chat.updateVideoRoom({ ...req.body, roomId: req.params.room_id })
+      return res.json(data);
+    } catch (error) {
+      console.log('error: ', error);
+
+      return res.send(404);
+    }
+  }
+
+  async getVideoRooms(res: Response) {
+    try {
+
+      const data = await this.chat.getVideoRooms()
+      return res.json(data);
+    } catch (error) {
+      console.log('error: ', error);
+
+      return res.send(404);
+    }
+  }
+
+  async deleteVideoRoom(req: Request, res: Response) {
+    try {
+      const deleteVideoRoom: DeleteVideoRoomDTO = {
+        roomId: req.query.room_id?.toString()
+      }
+      const data = await this.chat.deleteVideoRoom(deleteVideoRoom)
+      return res.json(data);
+    } catch (error) {
+      console.log('error: ', error);
+
+      return res.send(404);
+    }
+  }
+
+
 }
 
 export default new ChatController();
