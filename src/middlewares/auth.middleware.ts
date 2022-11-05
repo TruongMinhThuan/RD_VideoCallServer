@@ -39,9 +39,6 @@ export const isAuth = (req?: Request, res?: Response, next?: NextFunction) => {
         // console.log('auth roles:: ',allowRoles);
         next();
     } catch (err) {
-        console.log('====================================');
-        console.log('error: ', err);
-        console.log('====================================');
         res.status(401).send({ message: 'Unauthentication' });
     }
 }

@@ -1,0 +1,1 @@
+export { default as UserProfileController } from './user.profile'

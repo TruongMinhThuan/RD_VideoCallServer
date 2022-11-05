@@ -49,11 +49,11 @@ class Express {
         // parse various different custom JSON types as JSON
 
         // parse application/x-www-form-urlencoded
-        this.express.use(bodyParser.urlencoded({extended:true}))
+        this.express.use(bodyParser.urlencoded({ extended: true }))
         this.express.use(express.json())
         // parse application/json
         this.express.use(bodyParser.json())
-        this.express.use(multer().any())
+        // this.express.use(multer().single('file'))
 
         // Registering Exception / Error Handlers
         //  this.express.use(ExceptionHandler.logErrors);
@@ -64,7 +64,7 @@ class Express {
         // Start the server on the specified port
         this.express.listen(port, () => {
             this.express = Routes.mountApi(this.express);
-            return console.log(`Server :: Running @ 'http://localhost:${port}'`);
+            return console.log(`Server :: Running port ${port}`);
         }).on('error', (_error) => {
             return console.log('Error: ', _error.message);
         });;
