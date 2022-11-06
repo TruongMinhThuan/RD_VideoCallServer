@@ -66,6 +66,26 @@ class ChatController {
     }
   }
 
+  async getConversation(req: Request, res: Response) {
+    try {
+      const conversation = await this.chat.getConversationDetail({ _id: req.params.id })
+      return res.json(conversation)
+    } catch (error) {
+      console.log('errors: ', error);
+      return res.sendStatus(404)
+    }
+  }
+
+  async updateConversation(req: Request, res: Response) {
+    try {
+      const conversation = await this.chat.updateConversation({ conversationId: req.params.id, data: req.body })
+      return res.json(conversation)
+    } catch (error) {
+      console.log('errors: ', error);
+      return res.sendStatus(404)
+    }
+  }
+
   async joinConversation(req: Request, res: Response) {
     try {
       const conversations = await this.chat.joinConversation({ _id: req.params.id, participant: this.user_id })

@@ -7,7 +7,12 @@ const ConversationSchema = new mongoose.Schema({
   last_message: { type: mongoose.Types.ObjectId, ref: 'Message' },
   conversation_participants: [{ type: mongoose.Types.ObjectId, ref: 'ConversationParticipant' }],
   connection_id: { type: String, require: false, index: true },
-  offer: { type: Object }
+  offer: { type: Object },
+  answer: { type: Object },
+  videocall_candidates:[],
+  caller: [],
+  callee: [],
+
 }, {
   timestamps: true,
 

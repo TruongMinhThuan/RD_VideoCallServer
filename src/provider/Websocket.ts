@@ -4,6 +4,7 @@ import { IncomingMessage } from 'http';
 import { Server, Socket } from 'socket.io';
 import ChatSocketServices from '@services/ChatSocketServices';
 import { ChatSocketController } from '@controllers/socket/chats/chatSocket.controller';
+import { VideoCallSocketController } from '@controllers/socket/chats/videocallSocket.controller';
 
 interface ServerToClientEvents {
   noArg: () => void;
@@ -52,6 +53,7 @@ class Websocket {
     wss.on('connection', ((socket) => {
       console.log('An user has connected to socket...');
       new ChatSocketController(socket)
+      new VideoCallSocketController(socket)
     }));
 
   }
