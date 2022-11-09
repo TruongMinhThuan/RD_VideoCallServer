@@ -91,13 +91,13 @@ export default class ChatService {
     let conversations = await Conversation
       .find({ conversation_participants: { $in: [resource.user_id] } })
       .sort({ updatedAt: 'descending' })
-      .populate({
-        path: 'conversation_participants',
-        populate: {
-          path: 'participant',
-          select: 'username'
-        },
-      })
+      // .populate({
+      //   path: 'conversation_participants',
+      //   populate: {
+      //     path: 'participant',
+      //     select: 'username'
+      //   },
+      // })
       .populate({
         path: 'last_message',
         populate: {

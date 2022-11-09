@@ -17,19 +17,32 @@ export class VideoCallSocketController {
 
     private handleVideoCall() {
         this._socket.on('videocall:offer', (data) => {
-            console.log('video call offer:: ', data);
+            console.log('offer data: ', data);
+
+            let calleeIdList = data?.callee_ids
+            if (calleeIdList) {
+                let incommingcall: string
+                if (calleeIdList.length == 1) {
+                    incommingcall = `incommingcall:${calleeIdList[0]}`
+                    this._socket.broadcast.emit(incommingcall, data)
+                } else if (calleeIdList?.length > 1) {
+                    calleeIdList?.forEach((callee: string) => {
+                        incommingcall = `incommingcall:${callee}`
+                        this._socket.broadcast.emit(incommingcall, data)
+                    });
+                }
+                console.log('incomming call::: ', incommingcall);
+            }
 
             this.addConversationOfferVideo(data.conversationId, data.offer)
         })
 
         this._socket.on('videocall:answer', (data) => {
-            console.log('video call answer:: ', data);
-
             this.addConversationAnswerVideo(data.conversationId, data.answer)
+            this._socket.broadcast.emit('videocall:have-answer', data)
         })
 
         this._socket.on('videocall:join-with-candidates', (data) => {
-            console.log('video call candidates:: ', data);
             // this.addConversationVideoCandidates(data.conversationId, data)
 
 
@@ -44,7 +57,6 @@ export class VideoCallSocketController {
         })
 
         this._socket.on('videocall:cancel', (data) => {
-            console.log('video call offer:: ', data);
             this.removeConversationOfferVideo(data.conversationId)
 
         })
