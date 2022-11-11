@@ -31,7 +31,6 @@ export class VideoCallSocketController {
                         this._socket.broadcast.emit(incommingcall, data)
                     });
                 }
-                console.log('incomming call::: ', incommingcall);
             }
 
             this.addConversationOfferVideo(data.conversationId, data.offer)
@@ -44,7 +43,6 @@ export class VideoCallSocketController {
 
         this._socket.on('videocall:join-with-candidates', (data) => {
             // this.addConversationVideoCandidates(data.conversationId, data)
-
 
             if (data.from == 'caller') {
                 this.addConversationVideoCallerCandidates(data.conversationId, data.candidate)
