@@ -4,7 +4,12 @@ import { ChatController } from '@controllers/api';
 import { isAuth } from 'src/middlewares/auth.middleware';
 
 const RoomRoute = express.Router();
+
+RoomRoute.get('/conversation/:id', isAuth, (req, res) => ChatController.getConversation(req, res));
+
 RoomRoute.post('/conversation', isAuth, (req, res) => ChatController.createConversation(req, res));
+
+RoomRoute.patch('/conversation/:id', isAuth, (req, res) => ChatController.updateConversation(req, res));
 
 RoomRoute.get('/conversations', isAuth, (req, res) => ChatController.getConversations(req, res));
 
