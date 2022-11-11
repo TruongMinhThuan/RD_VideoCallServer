@@ -4,7 +4,6 @@ import ProfileService from '@services/ProfileService'
 import express from 'express'
 import multer from 'multer'
 import { isAuth } from 'src/middlewares/auth.middleware'
-const upload = multer({ dest: 'uploads/' })
 
 const UserRouter = express.Router()
 

@@ -9,19 +9,19 @@ class AuthenticationController extends BaseController {
 
   constructor() {
     super();
+    this.auth = new AuthenticationService()
   }
 
   async login(req: Request, res: Response) {
     try {
       console.log('====================================');
-      console.log('input: ',req.body);
+      console.log('input1: ', req.body);
       console.log('====================================');
-      const auth = new AuthenticationService();
-      const user = await auth.login(req.body);
+      const user = await this.auth.login(req.body);
       return res.json(user);
     } catch (error) {
       console.log('====================================');
-      console.log('error: ',error);
+      console.log('error: ', error);
       console.log('====================================');
       return res.send(404);
     }

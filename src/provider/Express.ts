@@ -49,17 +49,11 @@ class Express {
         // parse various different custom JSON types as JSON
 
         // parse application/x-www-form-urlencoded
-        this.express.use(bodyParser.urlencoded({ extended: true }))
+        this.express.use(bodyParser.urlencoded({extended:true}))
         this.express.use(express.json())
         // parse application/json
         this.express.use(bodyParser.json())
-        // this.express.use(multer().single('file'))
-
-        // Registering Exception / Error Handlers
-        //  this.express.use(ExceptionHandler.logErrors);
-        //  this.express.use(ExceptionHandler.clientErrorHandler);
-        //  this.express.use(ExceptionHandler.errorHandler);
-        //  this.express = ExceptionHandler.notFoundHandler(this.express);
+        this.express.use(multer().any())
 
         // Start the server on the specified port
         this.express.listen(port, () => {
