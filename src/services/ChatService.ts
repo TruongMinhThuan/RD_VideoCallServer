@@ -3,14 +3,9 @@ import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
 import { CreateConversationDTO, getConversationsDTO, MakeFriendDTO, SendMessageDTO } from '@dto/index';
 import { ConversationParticipant, Message, Conversation } from '@models/index';
 import { Request } from 'express';
-import ip from 'ip'
 import Networking from './Networking';
 import { v4 } from 'uuid'
 import AddConversationParticipantDTO from '@dto/chat-conversation/AddConversationParticipant.dto';
-import VideoRoom from '@models/videoroom.model';
-import CreateVideoRoomDTO from '@dto/video-room/CreateVideoRoom.dto';
-import DeleteVideoRoomDTO from '@dto/video-room/DeleteVideoRoom.dto';
-import UpdateVideoRoomDTO from '@dto/video-room/UpdateVideoRoom.dto';
 import UpdateConversationDTO from '@dto/chat-conversation/UpdateConversation.dto';
 export default class ChatService {
   constructor() {
@@ -27,8 +22,15 @@ export default class ChatService {
   }
 
   async createConversationRoom(resource: CreateConversationDTO): Promise<any> {
+    let conversationParticipant = new ConversationParticipant({ ...resource, is_author: true })
+    conversationParticipant = await conversationParticipant.save()
     let conversation = new Conversation({ name: resource.name, connection_id: `${v4().toString()}-${resource.participant}` });
-    conversation.conversation_participants.push(resource.participant)
+    conversation.conversation_participants.push(conversationParticipant)
+    const lastMessage = new Message({ content: `Create room ${resource.name}`, conversation: conversation._id, sender: conversationParticipant.participant })
+    lastMessage.save()
+    conversation.last_message = Object(lastMessage._id)
+    await conversation.save()
+
     conversation = await conversation.save();
     return conversation
   }
@@ -61,9 +63,11 @@ export default class ChatService {
     author.participant = resource.author
     const connection_id = `${author.participant}-${friend.participant}`
     const existConversation = await this.getFriendConnection(connection_id)
+
     if (existConversation) {
       return existConversation
     }
+
     await friend.save()
     await author.save()
     let conversation = new Conversation();
@@ -187,29 +191,4 @@ export default class ChatService {
     };
   }
 
-  async createVideoRoom(resource: CreateVideoRoomDTO) {
-    let videoRoom = new VideoRoom()
-    videoRoom.offer = resource.offer
-    videoRoom.save()
-
-    return videoRoom
-  }
-
-  async updateVideoRoom(resource: UpdateVideoRoomDTO) {
-    console.log('update data:: ', resource);
-    let videoRoom = await VideoRoom.findById(resource.roomId)
-    videoRoom.answer = resource.answer
-    videoRoom.save()
-    return videoRoom
-  }
-
-  async getVideoRooms() {
-    let videoRooms = await VideoRoom.find({})
-    return videoRooms
-  }
-
-  async deleteVideoRoom(resource: DeleteVideoRoomDTO) {
-    await (await VideoRoom.findById(resource.roomId)).delete()
-    return true
-  }
 }

@@ -7,8 +7,8 @@ import User from '@models/UserModel';
 export class ContactService {
 
 
-    async getContacts(): Promise<any> {
-        const contacts = await User.find({}).select('username createdAt')
+    async getContacts(user_id: string): Promise<any> {
+        const contacts = await User.find({ _id: { $ne: user_id } }).select('username createdAt')
         return contacts
     }
 

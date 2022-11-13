@@ -10,14 +10,8 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 
 
         const decoded = jwt.verify(token.replace('Bearer ', ''), 'secret');
-        console.log('====================================');
-        console.log('user:: ', decoded);
-        console.log('====================================');
         next();
     } catch (err) {
-        console.log('====================================');
-        console.log('error: ', err);
-        console.log('====================================');
         res.status(401).send('Please authenticate');
     }
 }

@@ -17,7 +17,7 @@ class AuthenticationController extends BaseController {
       const user = await this.auth.login(req.body);
       return res.json(user).status(200);
     } catch (error) {
-      return res.send(404);
+      return res.sendStatus(404);
     }
   }
 
@@ -26,7 +26,7 @@ class AuthenticationController extends BaseController {
       const user = await this.auth.register(req.body);
       return res.json(user).status(201);
     } catch (error) {
-      return res.json(error).status(404);
+      return res.sendStatus(404)
     }
   }
 
