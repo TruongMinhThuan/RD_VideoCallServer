@@ -55,16 +55,10 @@ class Express {
         this.express.use(bodyParser.json())
         this.express.use(multer().any())
 
-        // Registering Exception / Error Handlers
-        //  this.express.use(ExceptionHandler.logErrors);
-        //  this.express.use(ExceptionHandler.clientErrorHandler);
-        //  this.express.use(ExceptionHandler.errorHandler);
-        //  this.express = ExceptionHandler.notFoundHandler(this.express);
-
         // Start the server on the specified port
         this.express.listen(port, () => {
             this.express = Routes.mountApi(this.express);
-            return console.log(`Server :: Running @ 'http://localhost:${port}'`);
+            return console.log(`Server :: Running port ${port}`);
         }).on('error', (_error) => {
             return console.log('Error: ', _error.message);
         });;

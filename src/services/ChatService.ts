@@ -68,8 +68,8 @@ export default class ChatService {
     await author.save()
     let conversation = new Conversation();
     conversation.connection_id = connection_id
-    conversation.conversation_participants.push(Object(author.participant))
-    conversation.conversation_participants.push(Object(friend.participant))
+    conversation.conversation_participants.push(author)
+    conversation.conversation_participants.push(friend)
     const lastMessage = new Message({ content: `Say hi to you`, conversation: conversation._id, sender: author.participant })
     lastMessage.save()
     conversation.last_message = Object(lastMessage._id)
@@ -89,15 +89,15 @@ export default class ChatService {
   async getConversations(resource: getConversationsDTO) {
 
     let conversations = await Conversation
-      .find({ conversation_participants: { $in: [resource.user_id] } })
+      .find({ "conversation_participants.participant": resource.user_id })
       .sort({ updatedAt: 'descending' })
-      // .populate({
-      //   path: 'conversation_participants',
-      //   populate: {
-      //     path: 'participant',
-      //     select: 'username'
-      //   },
-      // })
+      .populate({
+        path: 'conversation_participants',
+        populate: {
+          path: 'participant',
+          select: 'username'
+        },
+      })
       .populate({
         path: 'last_message',
         populate: {

@@ -10,7 +10,6 @@ export default class AuthenticationService extends BaseService {
 
   public async login(data: LoginDTO) {
     try {
-      console.log('user login:: ', data.username);
       const user = await User.findOne({ username: data.username.toLowerCase() });
       console.log('user password:: ', user);
 
