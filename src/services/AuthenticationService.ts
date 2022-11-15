@@ -38,7 +38,7 @@ export default class AuthenticationService extends BaseService {
       await user.save();
       return user;
     } catch (error) {
-      throw error;
+      throw Error('Invalid User');
     }
   }
 

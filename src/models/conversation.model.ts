@@ -12,7 +12,6 @@ const ConversationSchema = new mongoose.Schema({
   videocall_candidates: [],
   caller: [],
   callee: [],
-
 }, {
   timestamps: true,
 

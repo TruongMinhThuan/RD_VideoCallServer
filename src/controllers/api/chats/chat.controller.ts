@@ -5,7 +5,6 @@ import { Response, Request, NextFunction } from 'express';
 import { CreateConversationDTO, SendMessageDTO } from '@dto/index';
 import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
 import AddConversationParticipantDTO from '@dto/chat-conversation/AddConversationParticipant.dto';
-import DeleteVideoRoomDTO from '@dto/video-room/DeleteVideoRoom.dto';
 
 class ChatController {
   private chat: ChatService = new ChatService();
@@ -13,8 +12,6 @@ class ChatController {
 
   constructor() {
     this.chat = new ChatService();
-    console.log('init:: chat controller');
-
   }
 
   async createConversation(req: Request, res: Response) {
@@ -23,22 +20,16 @@ class ChatController {
       const data = await this.chat.createConversation(body);
       return res.status(201).json(data);
     } catch (error) {
-      console.log('error: ', error);
-
       return res.sendStatus(404);
     }
   }
 
   async createConversationRoom(req: Request, res: Response) {
     try {
-      console.log('create room: ', req.user.user_id);
-
       const body: CreateConversationDTO = { ...req.body, participant: req.user.user_id }
       const data = await this.chat.createConversationRoom(body);
       return res.status(201).json(data);
     } catch (error) {
-      console.log('error: ', error);
-
       return res.sendStatus(404);
     }
   }
@@ -46,12 +37,10 @@ class ChatController {
   async addConversationRoomParticipants(req: Request, res: Response) {
     try {
       const body: AddConversationParticipantDTO = { ...req.body, conversation_id: req.params.conversation_id }
-      console.log('body:: ', body);
       const data = await this.chat.addConversationParticipants(body);
       return res.status(201).json(data);
     } catch (error) {
       console.log('error: ', error);
-
       return res.sendStatus(404);
     }
   }
@@ -126,56 +115,6 @@ class ChatController {
       return res.send(404);
     }
   }
-
-  async createVideoRoom(req: Request, res: Response) {
-    try {
-      const data = await this.chat.createVideoRoom(req.body)
-      return res.json(data);
-    } catch (error) {
-      console.log('error: ', error);
-
-      return res.send(404);
-    }
-  }
-
-  async updateVideoRoom(req: Request, res: Response) {
-    try {
-      const data = await this.chat.updateVideoRoom({ ...req.body, roomId: req.params.room_id })
-      return res.json(data);
-    } catch (error) {
-      console.log('error: ', error);
-
-      return res.send(404);
-    }
-  }
-
-  async getVideoRooms(res: Response) {
-    try {
-
-      const data = await this.chat.getVideoRooms()
-      return res.json(data);
-    } catch (error) {
-      console.log('error: ', error);
-
-      return res.send(404);
-    }
-  }
-
-  async deleteVideoRoom(req: Request, res: Response) {
-    try {
-      const deleteVideoRoom: DeleteVideoRoomDTO = {
-        roomId: req.query.room_id?.toString()
-      }
-      const data = await this.chat.deleteVideoRoom(deleteVideoRoom)
-      return res.json(data);
-    } catch (error) {
-      console.log('error: ', error);
-
-      return res.send(404);
-    }
-  }
-
-
 }
 
 export default new ChatController();

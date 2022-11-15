@@ -19,9 +19,11 @@ export class ContactController {
     }
 
     async getContactList(req: Request, res: Response) {
-
+        console.log('====================================');
+        console.log('req:: ', req.user);
+        console.log('====================================');
         try {
-            const data = await this.contact.getContacts()
+            const data = await this.contact.getContacts(req.user.user_id)
             return res.status(200).send(data)
         } catch (error) {
             console.log('error: ', error);
@@ -30,26 +32,21 @@ export class ContactController {
         }
     }
 
-    async addContact(req: Request, res: Response) {
-        try {
-            const data = await this.contact.getContacts()
-            return res.status(200).send(data)
-        } catch (error) {
-            console.log('error: ', error);
+    // async addContact(req: Request, res: Response) {
+    //     try {
+    //         const data = await this.contact.getContacts()
+    //         return res.status(200).send(data)
+    //     } catch (error) {
+    //         console.log('error: ', error);
 
-            return res.sendStatus(404);
-        }
-    }
+    //         return res.sendStatus(404);
+    //     }
+    // }
 
     async makeFriends(req: Request, res: Response) {
         try {
-            console.log('input: ', req.params.friend_id);
-
             const body: MakeFriendDTO = { ...req.body, author: req.user?.user_id, friend: req.params.friend_id }
             const data = await this.chat.makeFriend(body)
-            console.log('====================================');
-            console.log('making friends: ', data);
-            console.log('====================================');
             return res.status(200).send(data)
         } catch (error) {
             console.log('error: ', error);
