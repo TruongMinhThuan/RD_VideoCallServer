@@ -5,5 +5,4 @@ import { isAuth } from 'src/middlewares/auth.middleware';
 const ContactRoute = express.Router();
 ContactRoute.get('/contacts', isAuth, (req, res) => ContactController.getContactList(req, res));
 ContactRoute.post('/contact/:friend_id', isAuth, (req, res) => ContactController.makeFriends(req, res));
-
 export default ContactRoute;
