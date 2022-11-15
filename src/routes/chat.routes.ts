@@ -23,4 +23,7 @@ RoomRoute.post('/conversation-room', isAuth, (req, res) => ChatController.create
 
 RoomRoute.put('/conversation-room/:conversation_id', isAuth, (req, res) => ChatController.addConversationRoomParticipants(req, res));
 
+RoomRoute.get('/conversation-room-friendship/:conversation_id', isAuth, (req, res) => ChatController.getConversationRoomFriendship(req, res));
+
+
 export default RoomRoute;

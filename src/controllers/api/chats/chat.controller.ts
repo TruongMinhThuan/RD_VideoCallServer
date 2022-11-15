@@ -55,6 +55,23 @@ class ChatController {
     }
   }
 
+  /**
+   * 
+   * @param req 
+   * @param res 
+   * @desc get user who not in conversation room
+   * @returns 
+   */
+  async getConversationRoomFriendship(req: Request, res: Response) {
+    try {
+      const conversations = await this.chat.getConversationRoomFriendship({ conversation_id: req.params.conversation_id })
+      return res.json(conversations)
+    } catch (error) {
+      console.log('errors: ', error);
+      return res.sendStatus(404)
+    }
+  }
+
   async getConversation(req: Request, res: Response) {
     try {
       const conversation = await this.chat.getConversationDetail({ _id: req.params.id })
