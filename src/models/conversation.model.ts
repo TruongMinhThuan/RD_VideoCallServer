@@ -1,4 +1,5 @@
 import mongoose from '../provider/Database';
+import CallingParticipant, { CallingParticipantSchema } from './calling-participant.model';
 import { ConversationParticipantSchema } from './conversation-participant.model';
 
 // Define the Conversation Schema
@@ -9,9 +10,9 @@ const ConversationSchema = new mongoose.Schema({
   connection_id: { type: String, require: false, index: true },
   offer: { type: Object },
   answer: { type: Object },
-  videocall_candidates: [],
   caller: [],
   callee: [],
+  calling_participants: [CallingParticipantSchema]
 }, {
   timestamps: true,
 
