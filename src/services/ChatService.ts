@@ -1,12 +1,13 @@
 import JoinConversationDTO from '@dto/chat-conversation/JoinConversation.dto';
 import GetMessagesDTO from '@dto/chat-messages/GetMessages.dto';
-import { CreateConversationDTO, getConversationsDTO, MakeFriendDTO, SendMessageDTO } from '@dto/index';
+import { CreateConversationDTO, getConversationRoomFriendship, getConversationsDTO, MakeFriendDTO, SendMessageDTO } from '@dto/index';
 import { ConversationParticipant, Message, Conversation } from '@models/index';
 import { Request } from 'express';
 import Networking from './Networking';
 import { v4 } from 'uuid'
 import AddConversationParticipantDTO from '@dto/chat-conversation/AddConversationParticipant.dto';
 import UpdateConversationDTO from '@dto/chat-conversation/UpdateConversation.dto';
+import User from '@models/UserModel';
 export default class ChatService {
   constructor() {
 
@@ -112,6 +113,15 @@ export default class ChatService {
 
     return conversations
   }
+
+  async getConversationRoomFriendship(resource: getConversationRoomFriendship) {
+
+    const converation = await Conversation.findById(resource.conversation_id)
+    let participantIds = converation.conversation_participants?.map((e: any) => e.participant?.toString())
+    const contacts = await User.find({ _id: { $nin: participantIds } }).select('username createdAt')
+    return contacts
+  }
+
 
   async getConversationDetail(resource: getConversationsDTO) {
 

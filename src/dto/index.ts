@@ -4,3 +4,5 @@ export { default as CreateConversationDTO } from './chat-conversation/CreateChat
 export { default as SendMessageDTO } from './chat-messages/SendMessage.dto'
 export { default as getConversationsDTO } from './chat-conversation/GetConversation.dto'
 export { default as MakeFriendDTO } from './chat-conversation/MakeFriend.dto'
+export { default as getConversationRoomFriendship } from './chat-conversation/getConversationRoomFriendship'
+
