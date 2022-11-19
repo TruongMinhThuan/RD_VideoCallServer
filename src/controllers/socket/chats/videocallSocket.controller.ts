@@ -39,6 +39,9 @@ export class VideoCallSocketController {
         })
 
         this._socket.on('videocall:answer', (data) => {
+            console.log('====================================');
+            console.log('answer:::', data);
+            console.log('====================================');
             this.addConversationAnswerVideo(data.conversationId, data.answer, data.user._id)
             this._socket.broadcast.emit('videocall:have-answer', data)
         })
@@ -54,6 +57,9 @@ export class VideoCallSocketController {
             //     this._socket.broadcast.emit('videocall:joined-candidates', data)
             //     this.addConversationVideoCalleeCandidates(data.conversationId, data.candidate, data.user._id)
             // }
+
+            this._socket.broadcast.emit('videocall:joined-candidates', data)
+
 
         })
 
@@ -76,10 +82,10 @@ export class VideoCallSocketController {
 
     public async addConversationOfferVideo(conversationId: string, offer: any, participantId: string) {
         try {
-
             const callingParticipant = new CallingParticipant()
             callingParticipant.conversation = Object(conversationId)
             callingParticipant.participant = Object(participantId)
+            callingParticipant.offer = offer
             await callingParticipant.save()
             const conversation = await Conversation.findOneAndUpdate({
                 _id: conversationId
@@ -103,6 +109,7 @@ export class VideoCallSocketController {
         const callingParticipant = new CallingParticipant()
         callingParticipant.conversation = Object(conversationId)
         callingParticipant.participant = Object(participantId)
+        callingParticipant.answer = answer
         await callingParticipant.save()
 
         await Conversation.findOneAndUpdate({ _id: conversationId }, { answer: answer, $push: { calling_participants: callingParticipant } })

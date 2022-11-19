@@ -4,7 +4,9 @@ import mongoose from '../provider/Database';
 export const CallingParticipantSchema = new mongoose.Schema({
     participant: { type: mongoose.Types.ObjectId, ref: 'User' },
     conversation: { type: mongoose.Types.ObjectId, ref: 'Conversation' },
-    candidate_data: []
+    candidate_data: [],
+    offer: { type: Object },
+    answer: { type: Object },
 
 });
 
